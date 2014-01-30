@@ -10,6 +10,7 @@ import com.almanac.loam.Loam;
 import com.almanac.loam.TweenAccessors.SpriteTween;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
@@ -33,6 +34,8 @@ public class SplashScreen implements Screen {
 		Gdx.gl.glClearColor(0, 0, 0, 1);			// Set the color used for clearing
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);	// Do the actual clearing
 		manager.update(delta);
+		
+		//Gdx.app.log(Loam.fpsLogger, "Tween Complete");
 		
 		batch.begin();								// All batch rendering must be between begin() and end()
 			splashSprite.draw(batch);

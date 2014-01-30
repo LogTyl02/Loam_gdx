@@ -1,15 +1,17 @@
 package com.almanac.loam.Screens;
 
 import com.almanac.loam.Loam;
+import com.almanac.loam.World.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
 
 public class MainMenu implements Screen {
-
+		
+	
 	public MainMenu(Loam game) {
 		
-	}
+		}
 	
 	@Override
 	public void render(float delta) {
@@ -27,7 +29,9 @@ public class MainMenu implements Screen {
 
 	@Override
 	public void show() {
-		// TODO Auto-generated method stub
+		
+		//w.printTrees();
+		
 		
 	}
 
