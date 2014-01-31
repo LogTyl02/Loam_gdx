@@ -24,7 +24,7 @@ public class World {
 		int mooshies = 30;
 		
 		if (this.mushrooms.size() == 0) {
-			System.out.println(" Zero !");
+			System.out.println("You have zero mushrooms, yo.");
 		}
 		
 		for (int i = 0; i < mooshies; i ++) {
