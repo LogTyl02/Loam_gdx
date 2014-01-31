@@ -1,7 +1,8 @@
 package com.almanac.loam;
 
-import com.almanac.loam.Screens.MainMenu;
-import com.almanac.loam.World.World;
+
+import com.almanac.loam.Screens.*;
+import com.almanac.loam.View.World;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.FPSLogger;
@@ -18,10 +19,10 @@ public class Loam extends Game {
 	public void create() {		
 		FPSLOGGER = new FPSLogger();
 		
-		//setScreen(new SplashScreen(this));
-		setScreen(new MainMenu(this));
-		w = new World();
-		w.growMushrooms();
+		setScreen(new SplashScreen(this));
+		//setScreen(new MainMenu(this));
+		
+		
 		
 	}
 

@@ -12,7 +12,13 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont.TextBounds;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 
 public class MainMenu implements Screen {
 		//Loam game;
@@ -28,6 +34,14 @@ public class MainMenu implements Screen {
 		Texture loamTitle;
 		Sprite loamTitleSprite;
 		
+		Stage stage;
+		TextureAtlas atlas;
+		Skin skin;
+		TextButton button;
+		
+		int viewHeight;
+		int viewWidth;
+		
 		private ParticleEffect effect;
 		
 	
@@ -42,16 +56,16 @@ public class MainMenu implements Screen {
 		int viewHeight = Gdx.graphics.getHeight();
 		int viewWidth  = Gdx.graphics.getWidth();
 		
-		float x = 100;
-		float y = 20;
-		float alignmentWidth = 150;
+		
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
+		//stage.act(delta);
 		
 		spriteBatch.begin();
+		//stage.draw();
 		font.setColor(Color.RED);
-		
+		button.draw(spriteBatch, 1f);;
 		//font.draw(spriteBatch, text, 100f, 400f);
 		font.draw(spriteBatch, sphinxText, (viewWidth / 2) - (454 / 2), viewHeight / 2 - 300);
 		//font.setColor(Color.LIGHT_GRAY);
@@ -63,23 +77,63 @@ public class MainMenu implements Screen {
 		font.setColor(Color.WHITE);
 		font.draw(spriteBatch, PLAY, (viewWidth / 2) - 70 - 70, (viewHeight - 450));
 		font.draw(spriteBatch, QUIT, (viewWidth / 2) + 71, (viewHeight - 450));
+		
 		spriteBatch.end();
 		
 	}
 
 	@Override
 	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
+		viewHeight = Gdx.graphics.getHeight();
+		viewWidth  = Gdx.graphics.getWidth();
+		
+		effect.setPosition(viewWidth/2, viewHeight);
+		
+		if (stage == null) {
+			stage = new Stage(width, height, true);
+			
+		}
+		stage.clear();
+		
+		
+		Gdx.input.setInputProcessor(stage);
+		
+		TextButtonStyle style = new TextButtonStyle();
+		style.up = skin.getDrawable("buttonnormal");
+		style.down = skin.getDrawable("buttonpressed");
+		style.font = font;
+		
+		button = new TextButton("PLAY", style);
+		button.setWidth(200);
+		button.setWidth(100);
+		button.setX(viewWidth / 2 - button.getWidth() / 2);
+		button.setY(viewWidth / 2 - button.getHeight() / 2);
+		
+		//stage.addActor(button);
+		button.addListener(new InputListener() {
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				System.out.println("DOWN");
+				return true;
+			}
+			
+			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+				System.out.println("BOINK");
+				
+			}
+		});
 		
 	}
 
 	@Override
 	public void show() {
 		
+		atlas = new TextureAtlas("data/button.pack");
+		skin = new Skin();
+		skin.addRegions(atlas);
 		
 		effect = new ParticleEffect();
 		effect.load(Gdx.files.internal("data/snow.p"), Gdx.files.internal("data"));
-		effect.setPosition(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight());
+		
 		effect.start();
 		
 		sphinxText = "Sphinx of black quartz, judge my vows.";
@@ -91,9 +145,9 @@ public class MainMenu implements Screen {
 		
 		font = new BitmapFont(Gdx.files.internal("data/gameFont.fnt"),
 				Gdx.files.internal("data/gameFont_0.tga"), false);	
-		float alignmentWidth;
+		//float alignmentWidth;
 		bounds = font.getBounds(sphinxText);
-		alignmentWidth = 1000;
+		//alignmentWidth = 1000;
 		System.out.println(font.getBounds(QUIT).width);
 		loamTitle = new Texture("data/LoamTitle.png");
 		loamTitle.setFilter(TextureFilter.Linear, TextureFilter.Linear);
@@ -124,6 +178,11 @@ public class MainMenu implements Screen {
 	@Override
 	public void dispose() {
 		spriteBatch.dispose();
+		font.dispose();
+		stage.dispose();
+		atlas.dispose();
+		loamTitle.dispose();
+		effect.dispose();
 		font.dispose();
 		
 	}

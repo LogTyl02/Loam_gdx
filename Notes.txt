@@ -1,0 +1,69 @@
+
+
+World:
+	- Holds world information
+
+	-- Arrays
+		- Actors
+			- Tiles
+				- Walkable
+					- Grass
+					- Dirt
+					- Mud
+					- Shallow Water
+				- Not Walkable (Collides)
+					- Trees
+					- Thickets
+					- Rocks
+					- Deep Water
+					- Monster
+					- Player
+			- Mushrooms
+			- Particle Emitters
+		
+	-- Player
+	-- Monster
+	-- Scent nodes for monster AI
+
+World Renderer:
+	- Draws the world
+
+		-- Camera
+		-- SpriteBatch
+		-- Shaperenderer (For debugging) (Not for final game, processor intensive)
+
+	- Needs access to world's objects for drawing
+
+World Controller:
+	- Take input and sends it to objects
+		- Keyboard and mouse
+		- Inputprocessor
+
+	- Needs acces to the world's objects to control them
+
+Moveable Actors
+	- Player
+		- Health (If any)
+		- Speed
+		- X Coordinate (or tile position)
+		- Y Coordinate ''
+
+
+	- Monster
+		- Speed
+		- AI
+		- X coord
+		- Y coord
+
+Stationary Actors
+	- Walls
+		- Trees
+		- Thickets
+
+	- Rectangle for collision
+	- Width
+	- Height
+	- x coords
+	- y coords
+	- (or vectors)
+	
