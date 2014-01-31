@@ -10,7 +10,7 @@ import com.almanac.loam.Loam;
 import com.almanac.loam.TweenAccessors.SpriteTween;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.FPSLogger;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
@@ -21,9 +21,10 @@ public class SplashScreen implements Screen {
 	
 	Texture splashTexture;
 	Sprite splashSprite;
-	SpriteBatch batch;
+	SpriteBatch spriteBatch;
 	Loam game;
 	TweenManager manager;
+	Music spooky;
 	
 	public SplashScreen(Loam game) {
 		this.game = game;
@@ -37,9 +38,9 @@ public class SplashScreen implements Screen {
 		
 		//Gdx.app.log(Loam.fpsLogger, "Tween Complete");
 		
-		batch.begin();								// All batch rendering must be between begin() and end()
-			splashSprite.draw(batch);
-		batch.end();
+		spriteBatch.begin();								// All batch rendering must be between begin() and end()
+			splashSprite.draw(spriteBatch);
+		spriteBatch.end();
 		
 	}
 
@@ -51,13 +52,14 @@ public class SplashScreen implements Screen {
 
 	@Override
 	public void show() {
+		spooky = Gdx.audio.newMusic(Gdx.files.internal("data/spook.ogg"));
 		splashTexture = new Texture("data/almanac_007.png");
 		splashTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		
 		splashSprite = new Sprite(splashTexture);
 		splashSprite.setColor(1, 1, 1, 0);
 			
-		batch = new SpriteBatch();
+		spriteBatch = new SpriteBatch();
 		
 		Tween.registerAccessor(Sprite.class, new SpriteTween());
 		
@@ -70,7 +72,8 @@ public class SplashScreen implements Screen {
 			}
 		};
 		
-		Tween.to(splashSprite, SpriteTween.ALPHA, 3f).target(1).ease(TweenEquations.easeInQuad).repeatYoyo(1, 3f).setCallback(cb).setCallbackTriggers(TweenCallback.COMPLETE).start(manager);
+		spooky.play();
+		Tween.to(splashSprite, SpriteTween.ALPHA, 5f).target(1).ease(TweenEquations.easeInQuad).repeatYoyo(1, 5f).setCallback(cb).setCallbackTriggers(TweenCallback.COMPLETE).start(manager);
 	}
 
 	private void tweenCompleted() {
@@ -98,6 +101,9 @@ public class SplashScreen implements Screen {
 
 	@Override
 	public void dispose() {
+		spooky.dispose();
+		splashTexture.dispose();
+		spriteBatch.dispose();
 		
 		
 	}
