@@ -78,7 +78,8 @@ public class SplashScreen implements Screen {
 
 	private void tweenCompleted() {
 		Gdx.app.log(Loam.LOG, "Tween Complete");
-		game.setScreen(new MainMenu(game));
+		//game.setScreen(new MainMenu(game));
+		game.setScreen(new Play(game));
 	}
 	
 	@Override

@@ -13,26 +13,28 @@ public class Loam extends Game {
 	public static FPSLogger FPSLOGGER;
 	public AssetManager assetManager = new AssetManager();
 	
-	public World w;
+	public World world;
+
 	
 	@Override
 	public void create() {		
 		FPSLOGGER = new FPSLogger();
 		
-		setScreen(new SplashScreen(this));
+		//setScreen(new SplashScreen(this));
 		//setScreen(new MainMenu(this));
-		
-		
-		
+		setScreen(new Play(this));
 	}
 
 	@Override
 	public void dispose() {
+		
 		super.dispose();
+		
 	}
 
 	@Override
-	public void render() {		
+	public void render() {
+	;
 		super.render();
 		FPSLOGGER.log();
 	}
@@ -41,6 +43,8 @@ public class Loam extends Game {
 	public void resize(int width, int height) {
 		super.resize(width, height);
 	}
+	
+	
 
 	@Override
 	public void pause() {

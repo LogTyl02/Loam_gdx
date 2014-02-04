@@ -15,14 +15,23 @@ public class World {
 	
 	public World(Loam game) {
 		this.game = game;
-		player = new Player(3f, 32f, 32f, new Vector2(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight()));
+		player = new Player(3f, 8f, 8f, 5, 5);
+		Gdx.input.setInputProcessor(new InputHandler(this));
 		
 	}
+	
 	
 	public Player getPlayer() {
 		return player;
 	}
 	
+	public void update() {
+		player.update(); // World renderer will use this.
+	}
+	
+	public void dispose() {
+		
+	}
 
 }
 

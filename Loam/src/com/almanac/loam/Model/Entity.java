@@ -5,32 +5,40 @@ import com.badlogic.gdx.math.Vector2;
 
 public abstract class Entity {
 
-	protected Vector2 	position;
+	protected float		x;
+	protected float		y;
 	protected float   	width;
 	protected float		height;
 	protected Rectangle bounds;
 	
-	public Entity(Vector2 position, float width, float height) {
-		this.position = position;
+	public Entity(float x, float y, float width, float height) {
+		this.x = x;
+		this.y = y;
 		this.width = width;
 		this.height	= height;
-		bounds = new Rectangle(position.x, position.y, width, height);
+		bounds = new Rectangle(x, y, width, height);
 	}
 	
 	/**
 	 * @return the position
 	 */
-	public Vector2 getPosition() {
-		return position;
+	public float getX() {
+		return x;
 	}
 	
+	public float getY() {
+		return y;
+	}
 	/**
 	 * @param position the position to set
 	 */
-	public void setPosition(Vector2 position) {
-		this.position = position;
+	public void setX(float x) {
+		this.x = x;
 	}
 	
+	public void setY(float y) {
+		this.y = y;
+	}
 	/**
 	 * @return the width
 	 */

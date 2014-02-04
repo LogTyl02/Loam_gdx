@@ -2,21 +2,25 @@ package com.almanac.loam.Screens;
 
 import com.almanac.loam.Loam;
 import com.almanac.loam.View.World;
+import com.almanac.loam.View.WorldRenderer;
 import com.badlogic.gdx.Screen;
 
 public class Play implements Screen {
 
 	Loam game;
 	World world;
+	WorldRenderer renderer;
 	
 	public Play(Loam game) {
 		this.game = game;
+		world = new World(game);
+		renderer = new WorldRenderer(world);
 	}
 	
 	@Override
 	public void render(float delta) {
-		// TODO Auto-generated method stub
-		
+		world.update();
+		renderer.render();
 	}
 
 	@Override
@@ -33,7 +37,7 @@ public class Play implements Screen {
 
 	@Override
 	public void hide() {
-		// TODO Auto-generated method stub
+		dispose();
 		
 	}
 
