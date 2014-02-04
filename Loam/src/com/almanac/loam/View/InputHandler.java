@@ -25,32 +25,32 @@ public class InputHandler implements InputProcessor {
 		
 		switch(keycode) {
 			case Keys.NUMPAD_8:
-				player.setY(player.getY() + 16);
+				player.setY(player.getY() + 32);
 				break;
 			case Keys.NUMPAD_2:
-				player.setY(player.getY() - 16);
+				player.setY(player.getY() - 32);
 				break;
 			case Keys.NUMPAD_4:
-				player.setX(player.getX() - 16);
+				player.setX(player.getX() - 32);
 				break;
 			case Keys.NUMPAD_6:
-				player.setX(player.getX() + 16);
+				player.setX(player.getX() + 32);
 				break;
 			case Keys.NUMPAD_7:
-				player.setY(player.getY() + 16);
-				player.setX(player.getX() - 16);
+				player.setY(player.getY() + 32);
+				player.setX(player.getX() - 32);
 				break;
 			case Keys.NUMPAD_1:
-				player.setY(player.getY() - 16);
-				player.setX(player.getX() - 16);
+				player.setY(player.getY() - 32);
+				player.setX(player.getX() - 32);
 				break;
 			case Keys.NUMPAD_9:
-				player.setX(player.getX() + 16);
-				player.setY(player.getY() + 16);
+				player.setX(player.getX() + 32);
+				player.setY(player.getY() + 32);
 				break;
 			case Keys.NUMPAD_3:
-				player.setX(player.getX() + 16);
-				player.setY(player.getY() - 16);
+				player.setX(player.getX() + 32);
+				player.setY(player.getY() - 32);
 				break;
 				
 			case Keys.ESCAPE:

@@ -3,8 +3,8 @@ package com.almanac.loam.View;
 import com.almanac.loam.Loam;
 import com.almanac.loam.Model.Monster;
 import com.almanac.loam.Model.Player;
+import com.almanac.loam.Utils.IsoHelper;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Camera;
 
 public class World {
 	
@@ -12,11 +12,16 @@ public class World {
 	Player player;
 	Monster monster;
 	
+	float monsterStartX = 32;
+	float monsterStartY = 32;
+	
+	float playerStartX = 256;
+	float playerStartY = 256;
 	
 	public World(Loam game) {
 		this.game = game;
-		player = new Player(3f, 18f, 37f, 5, 5);
-		monster = new Monster(3f, 80f, 63f, 5, 5);
+		player = new Player(3f, 18f, 37f, playerStartX + 8, playerStartY + 8);
+		monster = new Monster(3f, 80f, 63f, monsterStartX, monsterStartY);
 		Gdx.input.setInputProcessor(new InputHandler(this));
 		
 	}
