@@ -3,13 +3,16 @@ package com.almanac.loam.View;
 import com.almanac.loam.Model.Player;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.graphics.Camera;
 
 
 public class InputHandler implements InputProcessor {
 
 	World world;
+	WorldRenderer worldRenderer;
 	Player player;
+	Camera camera;
+
 	
 	public InputHandler(World world) {
 		this.world = world;
@@ -18,23 +21,27 @@ public class InputHandler implements InputProcessor {
 	@Override
 	public boolean keyDown(int keycode) {
 		player = world.getPlayer();
+		camera = worldRenderer.getCamera();
+		
 		switch(keycode) {
 			case Keys.NUMPAD_8:
-				player.setY(player.getY() + 5);
+				player.setY(player.getY() + 16);
 				break;
 			case Keys.NUMPAD_2:
-				player.setY(player.getY() - 5);
+				player.setY(player.getY() - 16);
 				break;
 			case Keys.NUMPAD_4:
-				player.setX(player.getX() - 5);
+				player.setX(player.getX() - 16);
 				break;
 			case Keys.NUMPAD_6:
-				player.setX(player.getX() + 5);
+				player.setX(player.getX() + 16);
 				break;
+				
+
 			default:
 				break;
 		}
-		return true;
+		return false;
 	}
 
 	@Override
@@ -45,8 +52,25 @@ public class InputHandler implements InputProcessor {
 
 	@Override
 	public boolean keyTyped(char character) {
-		// TODO Auto-generated method stub
-		return false;
+		player = world.getPlayer();
+		switch(character) {
+			case Keys.NUMPAD_8:
+				player.setY(player.getY() + 16);
+				break;
+			case Keys.NUMPAD_2:
+				player.setY(player.getY() - 16);
+				break;
+			case Keys.NUMPAD_4:
+				player.setX(player.getX() - 16);
+				break;
+			case Keys.NUMPAD_6:
+				player.setX(player.getX() + 16);
+				break;
+			default:
+				break;
+		}
+		return true;
+		
 	}
 
 	@Override

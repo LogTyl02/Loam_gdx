@@ -9,7 +9,7 @@ public class Play implements Screen {
 
 	Loam game;
 	World world;
-	WorldRenderer renderer;
+	public WorldRenderer renderer;
 	
 	public Play(Loam game) {
 		this.game = game;
