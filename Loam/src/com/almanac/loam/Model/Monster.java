@@ -9,7 +9,8 @@ public class Monster extends MoveableEntity {
 	}
 	
 	public void update() {
-		
+		bounds.x = x;
+		bounds.y = y;
 	}
 	
 	

@@ -15,10 +15,12 @@ public class Loam extends Game {
 	
 	public World world;
 
+	public boolean isPaused;
 	
 	@Override
 	public void create() {		
 		FPSLOGGER = new FPSLogger();
+		isPaused = false;
 		
 		//setScreen(new SplashScreen(this));
 		//setScreen(new MainMenu(this));
@@ -49,10 +51,12 @@ public class Loam extends Game {
 	@Override
 	public void pause() {
 		super.pause();
+		isPaused = true;
 	}
 
 	@Override
 	public void resume() {
 		super.resume();
+		isPaused = false;
 	}
 }

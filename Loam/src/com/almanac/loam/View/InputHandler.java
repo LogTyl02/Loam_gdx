@@ -21,7 +21,7 @@ public class InputHandler implements InputProcessor {
 	@Override
 	public boolean keyDown(int keycode) {
 		player = world.getPlayer();
-		camera = worldRenderer.getCamera();
+		
 		
 		switch(keycode) {
 			case Keys.NUMPAD_8:
@@ -36,12 +36,33 @@ public class InputHandler implements InputProcessor {
 			case Keys.NUMPAD_6:
 				player.setX(player.getX() + 16);
 				break;
+			case Keys.NUMPAD_7:
+				player.setY(player.getY() + 16);
+				player.setX(player.getX() - 16);
+				break;
+			case Keys.NUMPAD_1:
+				player.setY(player.getY() - 16);
+				player.setX(player.getX() - 16);
+				break;
+			case Keys.NUMPAD_9:
+				player.setX(player.getX() + 16);
+				player.setY(player.getY() + 16);
+				break;
+			case Keys.NUMPAD_3:
+				player.setX(player.getX() + 16);
+				player.setY(player.getY() - 16);
+				break;
 				
-
+			case Keys.ESCAPE:
+				if (!world.game.isPaused) {
+					world.game.pause();
+				} else if (world.game.isPaused) {
+					world.game.resume();
+				}
 			default:
 				break;
 		}
-		return false;
+		return true;
 	}
 
 	@Override
@@ -69,7 +90,7 @@ public class InputHandler implements InputProcessor {
 			default:
 				break;
 		}
-		return true;
+		return false;
 		
 	}
 

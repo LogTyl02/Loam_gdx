@@ -89,11 +89,7 @@ public class WorldRenderer {
 		camera.update();
 		spriteBatch.setProjectionMatrix(camera.combined);
 		
-		shapeDebugger.setProjectionMatrix(camera.combined);
-		shapeDebugger.begin(ShapeType.Line);
-		shapeDebugger.rect(player.getX(), player.getY(), player.getWidth(), player.getHeight());		// Bounding box for player
-		shapeDebugger.rect(monster.getX(), monster.getY(), monster.getWidth(), monster.getHeight());	// Bounding box for monster
-		shapeDebugger.end();
+		
 		
 		spriteBatch.begin();
 		
@@ -107,6 +103,11 @@ public class WorldRenderer {
 			spriteBatch.draw(playerTexture, player.getX(), player.getY(), player.getWidth() / 2, player.getHeight() / 2, player.getWidth(), player.getHeight(), 1, 1, 0, 0, 0, playerTexture.getWidth(), playerTexture.getHeight(), false, false);
 		spriteBatch.end();
 		
+		shapeDebugger.setProjectionMatrix(camera.combined);
+		shapeDebugger.begin(ShapeType.Line);
+		shapeDebugger.rect(player.getX(), player.getY(), player.getWidth(), player.getHeight());		// Bounding box for player
+		shapeDebugger.rect(monster.getX(), monster.getY(), monster.getWidth(), monster.getHeight());	// Bounding box for monster
+		shapeDebugger.end();
 		
 	}
 
