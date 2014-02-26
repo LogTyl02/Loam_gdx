@@ -1,9 +1,13 @@
 package com.almanac.loam.View;
 
+import java.util.List;
+
+import com.almanac.loam.Model.Creature;
+import com.almanac.loam.Model.CreatureFactory;
+import com.almanac.loam.Model.FieldOfView;
+import com.almanac.loam.Model.ItemFactory;
 import com.almanac.loam.Model.Monster;
 import com.almanac.loam.Model.Player;
-import com.almanac.loam.Utils.IsoHelper;
-import com.almanac.loam.Utils.OrthoCamController;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
@@ -11,124 +15,108 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.BitmapFont.TextBounds;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 
 public class WorldRenderer {
+	
+	private int screenWidth = 800;
+	private int screenHeight = 600;
 
 	World world;
 	SpriteBatch spriteBatch;
-	Texture playerTexture;
-	Texture monsterTexture;
 	Texture grassTexture;
+	private BitmapFont font;
 	
 	public float cameraWidth;
 	public float cameraHeight;
-	 
-	final Matrix4 matrix = new Matrix4();
+	
+	private List<String> messages;
+	
+	Matrix4 matrix;
 	float width, height;
 	ShapeRenderer shapeDebugger;
 	
-	Player player;
-	Monster monster;
+	private Creature player;
+	private FieldOfView fov;
 	
-	OrthographicCamera camera;
-	OrthoCamController cameraController;
-	Texture textureTileset;
-	TextureRegion[] tileSet;
-	int[][] map;
+	private OrthographicCamera camera;
 	
-	public WorldRenderer(World world) {
+	public WorldRenderer(World world, Creature player, FieldOfView fov) {
 		this.world = world;
+		this.player = player;
+		this.fov = fov;
 		
+		font = new BitmapFont(Gdx.files.internal("data/gameFont.fnt"),
+				Gdx.files.internal("data/gameFont_0.tga"), false);
 		
-		
-		cameraWidth = (Gdx.graphics.getWidth());
-		cameraHeight = (Gdx.graphics.getHeight());
-		camera = new OrthographicCamera(cameraWidth / 3, cameraHeight /3);
+		cameraWidth = (Gdx.graphics.getWidth() / 0.5f);
+		cameraHeight = (Gdx.graphics.getHeight() / 0.5f);
+		camera = new OrthographicCamera();
 		camera.setToOrtho(false, cameraWidth, cameraHeight);
-
 		
-		//Gdx.input.setInputProcessor(cameraController);
-		player = world.getPlayer();
-		camera.position.set(500, 500, 1);
 		camera.update();
 		
 		spriteBatch = new SpriteBatch();
 		spriteBatch.setProjectionMatrix(camera.combined);
-		spriteBatch.setTransformMatrix(matrix);
-		playerTexture = new Texture("data/chronosprite.png"); // placeholder sprite
-		playerTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
-		monsterTexture = new Texture("data/golemsprite.png");
-		monsterTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
-		grassTexture = new Texture("data/grasspink.png");
-		grassTexture.setFilter(TextureFilter.Nearest,  TextureFilter.Nearest);
 		
 		shapeDebugger = new ShapeRenderer();
 		shapeDebugger.setColor(Color.CYAN);
 		
-		}
+		matrix = new Matrix4();
+		
+		/*
+		 * 	Camera Stuff!
+		 * 	Creating a new camera for rendering. Ortho for now but
+		 * 		might make it isometric.
+		 */
+		//camera = new OrthographicCamera();
+		
+
+		//matrix.setToRotation(new Vector3(1, 0, 0), 90);
+		
+	}
 	
 	public void render() {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		camera.position.set(player.x, player.y, 1);
 		
-		
-		
-		player = world.getPlayer();
-		monster = world.getMonster();
-		
-		
-		camera.position.set(player.getX(), player.getY(), 1);  // Make the camera follow the player
-		camera.update();
-		spriteBatch.setProjectionMatrix(camera.combined);
-		
-		
+		renderTiles();
+
+	}
+
+	private void renderTiles() {
+		System.out.println(this.player.visionRadius());
+		fov.update(this.player.x, this.player.y, this.player.visionRadius());
 		
 		spriteBatch.begin();
 		
-			for (float i = 0; i <= Gdx.graphics.getWidth() * 3; i += 32) {
-				for (float j = 0; j <= Gdx.graphics.getHeight() * 3; j += 32) {
-					spriteBatch.draw(grassTexture, i, j);
-					
-				}
-			}
+		for (int x = 0; x < screenWidth ; x++){
+	        for (int y = 0; y < screenHeight; y++){
+	        		int wx = x + 10;
+	        		int wy = y + 10;
+	            
+	        	if (player.canSee(wx, wy))
+	        		spriteBatch.draw(world.tile(x, y).texture(), x * 32, y * 32);
+	        }
+	    }
 		
-			
-			spriteBatch.draw(monsterTexture, monster.getX(), monster.getY(), monster.getWidth() / 2, monster.getHeight() / 2, monster.getWidth(), monster.getHeight(), 1, 1, 0, 0, 0, monsterTexture.getWidth(), monsterTexture.getHeight(), false, false);
-			spriteBatch.draw(playerTexture, player.getX(), player.getY(), player.getWidth() / 2, player.getHeight() / 2, player.getWidth(), player.getHeight(), 1, 1, 0, 0, 0, playerTexture.getWidth(), playerTexture.getHeight(), false, false);
 		spriteBatch.end();
-		
-		shapeDebugger.setProjectionMatrix(camera.combined);
-		shapeDebugger.begin(ShapeType.Line);
-		
-		shapeDebugger.rect(player.getX(), player.getY(), player.getWidth(), player.getHeight());		// Bounding box for player
-		shapeDebugger.rect(monster.getX(), monster.getY(), monster.getWidth(), monster.getHeight());	// Bounding box for monster
-		shapeDebugger.end();
-		
-	}
-
-	private void renderMap() {
-		for (int x = 0; x < 10; x++) {
-			for (int y = 10 - 1; y >= 0; y--) {
-				float x_pos = (x * 64 / 2.0f) + (y * 64 / 2.0f);
-				float y_pos = - (x * 32 / 2.0f) + (y * 32 /2.0f);
-				
-				spriteBatch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-				spriteBatch.draw(tileSet[map[x][y]], x_pos, y_pos, 64, 32);
-			}
-		}
 	}
 	
+
 	public Camera getCamera() {
 		return camera;
 	}
 	
+	public void setCamera(int x, int y, int z) {
+		camera.position.set(x, y, z);
+	}
 
 	public void update() {
 		// player.update
@@ -137,6 +125,6 @@ public class WorldRenderer {
 	
 	public void dispose() {
 		spriteBatch.dispose();
-		playerTexture.dispose();
 	}
+	
 }

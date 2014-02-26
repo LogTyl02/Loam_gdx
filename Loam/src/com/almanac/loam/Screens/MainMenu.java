@@ -21,7 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 
 public class MainMenu implements Screen {
-		//Loam game;
+		Loam game;
 		private SpriteBatch spriteBatch;
 		private BitmapFont font;
 		//private ShapeRenderer renderer;

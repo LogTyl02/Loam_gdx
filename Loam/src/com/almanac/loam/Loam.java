@@ -16,6 +16,8 @@ public class Loam extends Game {
 	public World world;
 
 	public boolean isPaused;
+	public boolean isPlaying;
+	public boolean isMenu;
 	
 	@Override
 	public void create() {		
@@ -24,7 +26,7 @@ public class Loam extends Game {
 		
 		//setScreen(new SplashScreen(this));
 		//setScreen(new MainMenu(this));
-		setScreen(new Play(this));
+		setScreen(new Play(this));	
 	}
 
 	@Override

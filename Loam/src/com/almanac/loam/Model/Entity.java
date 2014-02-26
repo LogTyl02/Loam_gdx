@@ -5,13 +5,13 @@ import com.badlogic.gdx.math.Vector2;
 
 public abstract class Entity {
 
-	protected float		x;
-	protected float		y;
+	protected int		x;
+	protected int		y;
 	protected float   	width;
 	protected float		height;
 	protected Rectangle bounds;
 	
-	public Entity(float x, float y, float width, float height) {
+	public Entity(int x, int y, float width, float height) {
 		this.x = x;
 		this.y = y;
 		this.width = width;
@@ -22,21 +22,21 @@ public abstract class Entity {
 	/**
 	 * @return the position
 	 */
-	public float getX() {
+	public int getX() {
 		return x;
 	}
 	
-	public float getY() {
+	public int getY() {
 		return y;
 	}
 	/**
 	 * @param position the position to set
 	 */
-	public void setX(float x) {
+	public void setX(int x) {
 		this.x = x;
 	}
 	
-	public void setY(float y) {
+	public void setY(int y) {
 		this.y = y;
 	}
 	/**

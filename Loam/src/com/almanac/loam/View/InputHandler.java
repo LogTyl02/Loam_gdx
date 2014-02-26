@@ -1,6 +1,8 @@
 package com.almanac.loam.View;
 
-import com.almanac.loam.Model.Player;
+import com.almanac.loam.Loam;
+import com.almanac.loam.Model.Creature;
+import com.almanac.loam.Screens.Play;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Camera;
@@ -10,48 +12,58 @@ public class InputHandler implements InputProcessor {
 
 	World world;
 	WorldRenderer worldRenderer;
-	Player player;
+	Creature player;
 	Camera camera;
+	int state;
+	Loam game;
 
 	
-	public InputHandler(World world) {
+	public InputHandler(World world, Creature player, int state) {
 		this.world = world;
+		this.player = player;
+		this.state = state;
 	}
 	
 	@Override
 	public boolean keyDown(int keycode) {
-		player = world.getPlayer();
 		
+		if (this.state == 0) {
+			switch(keycode) {
+			case Keys.P:
+				game.setScreen(new Play(game));
+			}
+		}
+		
+if (this.state == 1) {
+	
 		
 		switch(keycode) {
 			case Keys.NUMPAD_8:
-				player.setY(player.getY() + 32);
+				player.moveBy(0, 1);;
 				break;
 			case Keys.NUMPAD_2:
-				player.setY(player.getY() - 32);
+				player.moveBy(0, 1);;
 				break;
 			case Keys.NUMPAD_4:
-				player.setX(player.getX() - 32);
+				player.moveBy(0, 1);;
 				break;
 			case Keys.NUMPAD_6:
-				player.setX(player.getX() + 32);
+				player.moveBy(0, 1);;
 				break;
 			case Keys.NUMPAD_7:
-				player.setY(player.getY() + 32);
-				player.setX(player.getX() - 32);
+				player.moveBy(0, 1);;
 				break;
 			case Keys.NUMPAD_1:
-				player.setY(player.getY() - 32);
-				player.setX(player.getX() - 32);
+				player.moveBy(0, 1);;
 				break;
 			case Keys.NUMPAD_9:
-				player.setX(player.getX() + 32);
-				player.setY(player.getY() + 32);
+				player.moveBy(0, 1);;
 				break;
 			case Keys.NUMPAD_3:
-				player.setX(player.getX() + 32);
-				player.setY(player.getY() - 32);
+				player.moveBy(0, 1);;
 				break;
+			case Keys.W:
+				
 				
 			case Keys.ESCAPE:
 				if (!world.game.isPaused) {
@@ -62,7 +74,9 @@ public class InputHandler implements InputProcessor {
 			default:
 				break;
 		}
-		return true;
+		
+}
+return true;
 	}
 
 	@Override
@@ -73,19 +87,19 @@ public class InputHandler implements InputProcessor {
 
 	@Override
 	public boolean keyTyped(char character) {
-		player = world.getPlayer();
+
 		switch(character) {
 			case Keys.NUMPAD_8:
-				player.setY(player.getY() + 16);
+				player.moveBy(0, 1);;
 				break;
 			case Keys.NUMPAD_2:
-				player.setY(player.getY() - 16);
+				player.moveBy(0, 1);;
 				break;
 			case Keys.NUMPAD_4:
-				player.setX(player.getX() - 16);
+				player.moveBy(0, 1);;
 				break;
 			case Keys.NUMPAD_6:
-				player.setX(player.getX() + 16);
+				player.moveBy(0, 1);;
 				break;
 			default:
 				break;

@@ -1,17 +1,18 @@
 package com.almanac.loam.Model;
 
-import com.badlogic.gdx.math.Vector2;
+import com.almanac.loam.View.World;
+import com.badlogic.gdx.graphics.Texture;
 
-public class Player extends MoveableEntity{
 
-	public Player(float SPEED, float width, float height, float x, float y) {
-		super(SPEED, width, height, x, y);
+public class Player extends Creature {	
+
+	World world;
+	
+	public Player(World world, String name, Texture texture) {
+		super(world, name, texture);
 	}
 	
-	public void update() {
-		bounds.x = x;
-		bounds.y = y;
-	}
+	
 
 }
 

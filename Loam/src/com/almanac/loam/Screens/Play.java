@@ -1,7 +1,16 @@
 package com.almanac.loam.Screens;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.almanac.loam.Loam;
+import com.almanac.loam.Model.Creature;
+import com.almanac.loam.Model.CreatureFactory;
+import com.almanac.loam.Model.FieldOfView;
+import com.almanac.loam.Model.ItemFactory;
+import com.almanac.loam.View.InputHandler;
 import com.almanac.loam.View.World;
+import com.almanac.loam.View.WorldBuilder;
 import com.almanac.loam.View.WorldRenderer;
 import com.badlogic.gdx.Screen;
 
@@ -9,12 +18,72 @@ public class Play implements Screen {
 
 	Loam game;
 	World world;
+	private InputHandler inputHandler;
+	private List<String> messages;
 	public WorldRenderer renderer;
+	
+	private Creature player;
+	private Creature darkYoung;
+	private FieldOfView fov;
+	
+	private int worldWidth;
+	private int worldHeight;
 	
 	public Play(Loam game) {
 		this.game = game;
-		world = new World(game);
-		renderer = new WorldRenderer(world);
+		
+		messages =	new ArrayList<String>();
+		worldWidth			=	100;
+		worldHeight			=	50;
+		createWorld(game, worldWidth, worldHeight);
+		
+		fov = new FieldOfView(world);
+		CreatureFactory creatureFactory = new CreatureFactory(world, fov);
+		ItemFactory itemFactory = new ItemFactory(world);
+		
+		createCreatures(creatureFactory);
+		createItems(itemFactory);
+		
+		renderer = new WorldRenderer(world, this.player, fov);
+		this.inputHandler = new InputHandler(world, this.player, 1);
+		
+	}
+	
+	private void createWorld(Loam game, int worldWidth, int worldHeight) {
+		world = new WorldBuilder(worldWidth, worldHeight).makeCaves().build(game);
+	}
+	
+	private void createCreatures(CreatureFactory creatureFactory) {
+		player = creatureFactory.newPlayer(messages);
+		System.out.println("Player spawned at " + player.x + " " + player.y);
+		darkYoung = creatureFactory.newDarkYoung();
+		System.out.println("Dark Young spawned at " + darkYoung.x + " " + darkYoung.y);
+	}
+	
+	private void createItems(ItemFactory itemFactory) {
+		for (int i = 0; i < 50; i++) {
+			itemFactory.newRedMushroom();
+		}
+		
+		for (int i = 0; i < 10; i++) {
+			itemFactory.newBlueMushroom();
+		}
+		
+		for (int i = 0; i < 2; i++) {
+			itemFactory.newGoldMushroom();
+		}
+	}
+	
+	public int px() {
+		return player.x;
+	}
+	
+	public int py() {
+		return player.y;
+	}
+	
+	public Creature player() {
+		return player;
 	}
 	
 	@Override
@@ -31,7 +100,7 @@ public class Play implements Screen {
 
 	@Override
 	public void show() {
-		// TODO Auto-generated method stub
+		game.isPlaying = true;
 		
 	}
 
@@ -58,5 +127,4 @@ public class Play implements Screen {
 		// TODO Auto-generated method stub
 		
 	}
-
 }
