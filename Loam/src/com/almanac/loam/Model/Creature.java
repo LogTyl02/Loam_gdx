@@ -49,6 +49,7 @@ public class Creature {
 	
 	public void moveBy(int mx, int my) {
 		Tile tile = world.tile(x + mx, y + my);
+
 		
 		if (mx == 0 && my == 0) {
 			return;

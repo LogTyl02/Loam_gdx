@@ -18,10 +18,9 @@ public class InputHandler implements InputProcessor {
 	Loam game;
 
 	
-	public InputHandler(World world, Creature player, int state) {
+	public InputHandler(World world) {
 		this.world = world;
-		this.player = player;
-		this.state = state;
+
 	}
 	
 	@Override
@@ -39,7 +38,7 @@ if (this.state == 1) {
 		
 		switch(keycode) {
 			case Keys.NUMPAD_8:
-				player.moveBy(0, 1);;
+				player.x += 1;
 				break;
 			case Keys.NUMPAD_2:
 				player.moveBy(0, 1);;

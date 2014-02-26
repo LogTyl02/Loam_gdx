@@ -25,6 +25,7 @@ public class CreatureFactory {
 	public Creature newDarkYoung() {
 		Texture darkYoungTexture = new Texture("data/golemsprite.png");
 		Creature darkYoung = new Creature(world, "Dark Young", darkYoungTexture);
+		world.addAtEmptyLocation(darkYoung);
 		new DarkYoungAI(darkYoung, this);
 		return darkYoung;
 		

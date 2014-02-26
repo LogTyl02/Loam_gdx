@@ -3,14 +3,17 @@ package com.almanac.loam.View;
 import com.almanac.loam.Loam;
 import com.almanac.loam.Model.Tile;
 
+
 public class WorldBuilder {
 	Loam game;
+
 	private int width;
 	private int height;
 	
 	private Tile[][] tiles;
 	
 	public WorldBuilder(int width, int height) {
+
 		this.width = width;
 		this.height = height;
 		this.tiles = new Tile[width][height];

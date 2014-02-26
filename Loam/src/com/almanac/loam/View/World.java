@@ -6,12 +6,12 @@ import java.util.List;
 import com.almanac.loam.Loam;
 import com.almanac.loam.Model.Creature;
 import com.almanac.loam.Model.Item;
-import com.almanac.loam.Model.Point;
 import com.almanac.loam.Model.Tile;
 import com.badlogic.gdx.graphics.Texture;
 
 public class World {
 	Loam game;
+
 	private Tile[][] tiles;
 	private List<Creature> creatures;
 	
@@ -27,6 +27,7 @@ public class World {
 	
 	public World(Loam game, Tile[][] tiles) {
 		this.game = game;
+
 		this.tiles = tiles;
 		this.width = tiles.length;
 		this.height = tiles[0].length;
@@ -83,6 +84,9 @@ public class World {
 		}
 		while (!tile(x, y).isGround() || item(x, y) != null);
 		
+		System.out.println("Adding item");
+		System.out.println(item.texture());
+		
 		items[x][y] = item;
 	}
 	
@@ -102,43 +106,7 @@ public class World {
 	public void remove(int x, int y) {
 		items[x][y] = null;
 	}
-	
-	public void addAtEmptySpace(Item item, int x, int y) {
-		if (item == null) {
-			return;
-		}
 		
-		List<Point> points = new ArrayList<Point>();
-		List<Point> checked = new ArrayList<Point>();
-		
-		points.add(new Point(x, y));
-		
-		while (!points.isEmpty()) {
-			Point p = points.remove(0);
-			checked.add(p);
-			
-			if (!tile(p.x, p.y).isGround()) {
-				continue;
-			}
-				
-			if (items[p.x][p.y] == null) {
-				items[p.x][p.y] = item;
-				Creature c = this.creature(p.x, p.y);
-				
-				if (c != null) {
-					System.out.println("A thingy lands between your feet");
-					//c.notify("A %s lands between your feet", item.name());
-				}
-				return;
-			} else {
-				List<Point> neighbors = p.neighbors8();
-				neighbors.removeAll(checked);
-				points.addAll(neighbors);
-			}
-		}
-	}
-
-	
 	/*
 	 * 	Getters
 	 */
@@ -153,6 +121,14 @@ public class World {
 	
 	public Item item(int x, int y) {
 		return items[x][y];
+	}
+	
+	public Item[][] getItems() {
+		return items;
+	}
+	
+	public List<Creature> getCreatures() {
+		return creatures;
 	}
 	
 	public Texture texture(int x, int y) {

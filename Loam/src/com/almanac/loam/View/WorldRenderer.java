@@ -3,23 +3,17 @@ package com.almanac.loam.View;
 import java.util.List;
 
 import com.almanac.loam.Model.Creature;
-import com.almanac.loam.Model.CreatureFactory;
 import com.almanac.loam.Model.FieldOfView;
-import com.almanac.loam.Model.ItemFactory;
-import com.almanac.loam.Model.Monster;
-import com.almanac.loam.Model.Player;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.BitmapFont.TextBounds;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Matrix4;
 
 public class WorldRenderer {
@@ -34,8 +28,6 @@ public class WorldRenderer {
 	
 	public float cameraWidth;
 	public float cameraHeight;
-	
-	private List<String> messages;
 	
 	Matrix4 matrix;
 	float width, height;
@@ -68,43 +60,72 @@ public class WorldRenderer {
 		shapeDebugger.setColor(Color.CYAN);
 		
 		matrix = new Matrix4();
-		
-		/*
-		 * 	Camera Stuff!
-		 * 	Creating a new camera for rendering. Ortho for now but
-		 * 		might make it isometric.
-		 */
-		//camera = new OrthographicCamera();
-		
 
-		//matrix.setToRotation(new Vector3(1, 0, 0), 90);
-		
 	}
 	
 	public void render() {
+		int left = getScrollX();
+		int top = getScrollY();
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		camera.position.set(player.x, player.y, 1);
 		
-		renderTiles();
+		
+		if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+			player.moveBy(0, 1);
+			System.out.println(player.y);
+		}
+		
+		//camera.position.set(player.x, player.y, 1);
+		camera.position.set(world.width() / 2, world.height() / 2, 1);
+		renderTiles(left, top);
+		renderItems();
+		//renderPlayer();	
+		renderCreatures();
 
 	}
 
-	private void renderTiles() {
-		System.out.println(this.player.visionRadius());
-		fov.update(this.player.x, this.player.y, this.player.visionRadius());
+	private void renderTiles(int left, int top) {
+		fov.update(player.x, player.y, player.visionRadius());
 		
 		spriteBatch.begin();
 		
-		for (int x = 0; x < screenWidth ; x++){
-	        for (int y = 0; y < screenHeight; y++){
-	        		int wx = x + 10;
-	        		int wy = y + 10;
-	            
-	        	if (player.canSee(wx, wy))
-	        		spriteBatch.draw(world.tile(x, y).texture(), x * 32, y * 32);
+	
+		
+		for (int x = 0; x < world.width(); x++){
+	        for (int y = 0; y < world.height(); y++){
+	        		int wx = x;
+	        		int wy = y;
+	        		// spriteBatch.draw(world.tile(wx, wy).texture(), x * 32, y * 32);
+	        	//if (!player.canSee(wx, wy))
+	        		spriteBatch.draw(world.tile(wx, wy).texture(), x * 32, y * 32);
 	        }
 	    }
+		
+		spriteBatch.end();
+	}
+	
+	private void renderItems() {
+		spriteBatch.begin();
+		
+		for (int x = 0; x < world.width(); x++) {
+			for (int y = 0; y < world.height(); y++) {
+				if (!(world.item(x, y) == null)) {
+        			spriteBatch.draw(world.item(x, y).texture(), x * 32, y * 32);
+        		
+        		}
+			}
+		}
+		
+		spriteBatch.end();
+	}
+	
+
+	private void renderCreatures() {
+		spriteBatch.begin();
+		
+		for (Creature creature : world.getCreatures()) {
+			spriteBatch.draw(creature.texture(), creature.x * 32, creature.y * 32);
+		}
 		
 		spriteBatch.end();
 	}
@@ -116,6 +137,14 @@ public class WorldRenderer {
 	
 	public void setCamera(int x, int y, int z) {
 		camera.position.set(x, y, z);
+	}
+	
+	public int getScrollX() {
+		return Math.max(0,  Math.min(player.x * 32 - screenWidth / 2, world.width()- screenWidth));
+	}
+	
+	public int getScrollY() {
+		return Math.max(0, Math.min(player.y * 32 - screenHeight / 2, world.height() - screenHeight));
 	}
 
 	public void update() {

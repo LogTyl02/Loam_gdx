@@ -12,13 +12,13 @@ import com.almanac.loam.View.InputHandler;
 import com.almanac.loam.View.World;
 import com.almanac.loam.View.WorldBuilder;
 import com.almanac.loam.View.WorldRenderer;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 
 public class Play implements Screen {
 
 	Loam game;
 	World world;
-	private InputHandler inputHandler;
 	private List<String> messages;
 	public WorldRenderer renderer;
 	
@@ -33,8 +33,8 @@ public class Play implements Screen {
 		this.game = game;
 		
 		messages =	new ArrayList<String>();
-		worldWidth			=	100;
-		worldHeight			=	50;
+		worldWidth			=	75;
+		worldHeight			=	35;
 		createWorld(game, worldWidth, worldHeight);
 		
 		fov = new FieldOfView(world);
@@ -45,7 +45,7 @@ public class Play implements Screen {
 		createItems(itemFactory);
 		
 		renderer = new WorldRenderer(world, this.player, fov);
-		this.inputHandler = new InputHandler(world, this.player, 1);
+		Gdx.input.setInputProcessor(new InputHandler(world));
 		
 	}
 	
@@ -63,6 +63,7 @@ public class Play implements Screen {
 	private void createItems(ItemFactory itemFactory) {
 		for (int i = 0; i < 50; i++) {
 			itemFactory.newRedMushroom();
+			System.out.println("New red mushroom");
 		}
 		
 		for (int i = 0; i < 10; i++) {
