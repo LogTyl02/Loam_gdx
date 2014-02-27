@@ -47,6 +47,14 @@ public class World {
             return tiles[x][y];
     }
 	
+	public Tile[][] getTiles() {
+		return tiles;
+	}
+	
+	public void setTile(int x, int y, Tile tile) {
+		tiles[x][y] = tile;
+	}
+	
 	public Creature creature(int x, int y){
 		for (Creature c : creatures){
 			if (c.x == x && c.y == y)

@@ -11,7 +11,7 @@ public class WorldBuilder {
 	private int height;
 	
 	private Tile[][] tiles;
-	private float[][] n;
+	private float[][] perlin;
 	
 	public WorldBuilder(int width, int height) {
 
@@ -19,15 +19,8 @@ public class WorldBuilder {
 		this.height = height;
 		this.tiles = new Tile[width][height];
 		
-		n = PerlinNoiseGenerator.generateWhiteNoise(width, height);
+
 		
-		this.n = PerlinNoiseGenerator.generateSmoothNoise(n, 4);
-		
-		for (int x = 0; x < n.length; x++) {
-			for (int y = 0; y < n[x].length; y++) {
-				System.out.println(n[x][y]);
-			}
-		}
 	}
 	
 	public World build(Loam game) {
@@ -43,23 +36,20 @@ public class WorldBuilder {
 		return this;
 	}
 	
-	public WorldBuilder perlinTiles() {
+	public WorldBuilder perlinMap(int octave, float thresholdLow, float thresholdHigh) {
+		perlin = PerlinNoiseGenerator.generateWhiteNoise(width, height);
+		perlin = PerlinNoiseGenerator.generateSmoothNoise(perlin, octave);
+		
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
-				tiles[x][y] = n[x][y] > 0.3 && n[x][y] < 0.5 ? Tile.GRASS : Tile.ROCK;
+				tiles[x][y] = perlin[x][y] > thresholdLow && perlin[x][y] < thresholdHigh ? Tile.GRASS : Tile.ROCK;
 			}
 		}
 		return this;
 	}
 	
-	public WorldBuilder addDirt() {
-		for (int x = 0; x < width; x++) {
-			for (int y = 0; y < height; y++) {
-				if (tiles[x][y] == Tile.GRASS) {
-					tiles[x][y] = Math.random() < 0.5 ? Tile.GRASS : Tile.DIRT;
-				}
-			}
-		}
+	public WorldBuilder addDirtMap() {
+		// Perlin noise this
 		return this;
 	}
 	
@@ -91,43 +81,9 @@ public class WorldBuilder {
         }
         return this;
     }
-	
-	public WorldBuilder smoothDirt(int times) {
-        Tile[][] tiles2 = new Tile[width][height];
-        for (int time = 0; time < times; time++) {
- 
-         for (int x = 0; x < width; x++) {
-             for (int y = 0; y < height; y++) {
-              int floors = 0;
-              int dirt = 0;
- 
-              for (int ox = -1; ox < 2; ox++) {
-                  for (int oy = -1; oy < 2; oy++) {
-                   if (x + ox < 0 || x + ox >= width || y + oy < 0
-                        || y + oy >= height)
-                       continue;
- 
-                   if (tiles[x + ox][y + oy] == Tile.GRASS || tiles[x + ox][y + oy] == Tile.ROCK )
-                       floors++;
-                   else
-                       dirt++;
-                  }
-              }
-              tiles2[x][y] = floors >= dirt ? Tile.GRASS : Tile.DIRT;
-             }
-         }
-         tiles = tiles2;
-        }
-        return this;
-    }
-	
 
-	
 	public WorldBuilder makeCaves() {
 		return randomizeTiles().smooth(11);
 	}
 	
-	public WorldBuilder makeDirty(WorldBuilder tiles) {
-		return tiles.addDirt().smoothDirt(11);
-	}
 }

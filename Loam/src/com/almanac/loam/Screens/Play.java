@@ -8,6 +8,7 @@ import com.almanac.loam.Model.Creature;
 import com.almanac.loam.Model.CreatureFactory;
 import com.almanac.loam.Model.FieldOfView;
 import com.almanac.loam.Model.ItemFactory;
+import com.almanac.loam.Model.Tile;
 import com.almanac.loam.View.InputHandler;
 import com.almanac.loam.View.PerlinNoiseGenerator;
 import com.almanac.loam.View.World;
@@ -40,10 +41,12 @@ public class Play implements Screen {
 		messages =	new ArrayList<String>();
 		worldWidth			=	200;
 		worldHeight			=	100;
-
-		
+		int octave			= 	4;
+		float thresholdLow	=	0.3f;
+		float thresholdHigh	=	0.45f;
 		
 		createWorld(game, worldWidth, worldHeight);
+		//createPerlinWorld(game, worldWidth, worldHeight, octave, thresholdLow, thresholdHigh);
 		
 		fov = new FieldOfView(world);
 		CreatureFactory creatureFactory = new CreatureFactory(world, fov);
@@ -58,8 +61,23 @@ public class Play implements Screen {
 	}
 	
 	private void createWorld(Loam game, int worldWidth, int worldHeight) {
-		//world = new WorldBuilder(worldWidth, worldHeight).makeCaves().addDirt().build(game);
-		world = new WorldBuilder(worldWidth, worldHeight).perlinTiles().build(game);
+		// Use the cellular automata method to build a basic map
+		world = new WorldBuilder(worldWidth, worldHeight).makeCaves().build(game);
+		// Generate some paths with a perlin noise map
+		World perlinMap = new WorldBuilder(worldWidth, worldHeight).perlinMap(4, 0.4f, 0.5f).build(game);
+		// Intersect to carve paths into map
+
+		for (int x = 0; x < world.getTiles().length; x++) {
+			for (int y = 0; y < world.getTiles()[x].length; y++) {
+				if (world.tile(x, y) == Tile.ROCK && perlinMap.tile(x, y) == Tile.GRASS) {
+					world.setTile(x, y, Tile.GRASS);
+				}
+			}
+		}
+	}
+	
+	private void createPerlinWorld(Loam game, int worldWidth, int worldHeight, int octave, float thresholdLow, float thresholdHigh) {
+		world = new WorldBuilder(worldWidth, worldHeight).perlinMap(octave, thresholdLow, thresholdHigh).build(game);
 	}
 	
 	private void createCreatures(CreatureFactory creatureFactory) {
