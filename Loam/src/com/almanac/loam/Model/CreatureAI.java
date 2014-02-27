@@ -40,7 +40,6 @@ public class CreatureAI {
 			my = -1;
 		}
 		creature.moveBy(mx, my);
-		System.out.println("Wandering" + mx + my);
 	}
 	
 	public void onUpdate() {

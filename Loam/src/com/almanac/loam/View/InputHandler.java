@@ -22,7 +22,7 @@ public class InputHandler implements InputProcessor {
 		this.world = world;
 		this.worldRenderer = worldRenderer;
 	}
-	
+
 	@Override
 	public boolean keyDown(int keycode) {
 		

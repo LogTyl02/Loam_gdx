@@ -27,9 +27,7 @@ public class WorldRenderer {
 	public float cameraWidth;
 	public float cameraHeight;
 	
-	Matrix4 matrix;
 	float width, height;
-	ShapeRenderer shapeDebugger;
 	
 	private Creature player;
 	private FieldOfView fov;
@@ -40,40 +38,41 @@ public class WorldRenderer {
 		this.world = world;
 		this.player = world.player();
 		this.fov = fov;
-		
-				
+			
 		font = new BitmapFont(Gdx.files.internal("data/gameFont.fnt"),
 				Gdx.files.internal("data/gameFont_0.tga"), false);
 		
 		cameraWidth = (Gdx.graphics.getWidth() / 0.5f);
 		cameraHeight = (Gdx.graphics.getHeight() / 0.5f);
+		
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, cameraWidth, cameraHeight);
+		camera.position.set(player.x * 32, player.y * 32, 1);
 		
 		camera.update();
 		
 		spriteBatch = new SpriteBatch();
 		spriteBatch.setProjectionMatrix(camera.combined);
-		
-		shapeDebugger = new ShapeRenderer();
-		shapeDebugger.setColor(Color.CYAN);
-		
-		matrix = new Matrix4();
-
 	}
 	
 	public void render() {
+		int camX = player.x;
+		int camY = player.y;
 		
 		int left = getScrollX();
 		int top = getScrollY();
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 				
-		//camera.position.set(player.x, player.y, 1);
-		camera.position.set(world.width() / 2, world.height() / 2, 1);
+		camera.position.set(player.x * 32, player.y * 32, 1);
+		camera.update();
+		spriteBatch.setProjectionMatrix(camera.combined);
+		//camera.position.set(world.width() / 2, world.height() / 2, 1);
 		renderTiles(left, top);
 		renderItems();
 		renderCreatures();
+		
+		snagItems();
 
 	}
 
@@ -81,9 +80,7 @@ public class WorldRenderer {
 		fov.update(player.x, player.y, player.visionRadius());
 		
 		spriteBatch.begin();
-		
-	
-		
+			
 		for (int x = 0; x < world.width(); x++){
 	        for (int y = 0; y < world.height(); y++){
 	        		int wx = x;
@@ -103,8 +100,7 @@ public class WorldRenderer {
 		for (int x = 0; x < world.width(); x++) {
 			for (int y = 0; y < world.height(); y++) {
 				if (!(world.item(x, y) == null)) {
-        			spriteBatch.draw(world.item(x, y).texture(), x * 32, y * 32);
-        		
+        			spriteBatch.draw(world.item(x, y).texture(), x * 32, y * 32); 		
         		}
 			}
 		}
@@ -126,6 +122,17 @@ public class WorldRenderer {
 
 	public Camera getCamera() {
 		return camera;
+	}
+	
+	private void snagItems() {
+		int px = player.x;
+		int py = player.y;
+		
+		if (world.item(px, py) != null) {
+			world.updateScore(world.item(px, py).value());
+			System.out.println("SCORE: " + world.score());
+			world.remove(px, py);
+		}
 	}
 	
 	public void setCamera(int x, int y, int z) {

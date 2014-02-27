@@ -8,8 +8,8 @@ public class Main {
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
 		cfg.title = "Loam " + Loam.VERSION;
 		cfg.useGL20 = true;
-		cfg.width = 1400;
-		cfg.height = 900;
+		cfg.width = 900;
+		cfg.height = 600;
 		
 		new LwjglApplication(new Loam(), cfg);
 	}

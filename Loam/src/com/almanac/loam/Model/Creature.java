@@ -42,10 +42,7 @@ public class Creature {
 	public boolean canSee(int wx, int wy) {
 		return AI.canSee(wx, wy);
 	}
-	
-	public void pickup() {
-		Item item = world.item(x, y);
-	}
+
 	
 	public void moveBy(int mx, int my) {
 		Tile t = world.tile(x + mx, y + my);

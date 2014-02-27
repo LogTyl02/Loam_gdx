@@ -31,6 +31,7 @@ public class World {
 	
 	private int width;
 	private int height;
+	private int score;
 	
 	/*
 	 * 	Constructor
@@ -38,6 +39,7 @@ public class World {
 	
 	public World(Loam game, Tile[][] tiles) {
 		this.game = game;
+		this.score = 0;
 
 		this.tiles = tiles;
 		this.width = tiles.length;
@@ -130,6 +132,14 @@ public class World {
 			
 			creature.update();
 		}
+	}
+	
+	public void updateScore(int value) {
+		score += value;
+	}
+	
+	public int score() {
+		return score;
 	}
 	
 	public void remove(int x, int y) {
