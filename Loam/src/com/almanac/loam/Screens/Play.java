@@ -9,6 +9,7 @@ import com.almanac.loam.Model.CreatureFactory;
 import com.almanac.loam.Model.FieldOfView;
 import com.almanac.loam.Model.ItemFactory;
 import com.almanac.loam.View.InputHandler;
+import com.almanac.loam.View.PerlinNoiseGenerator;
 import com.almanac.loam.View.World;
 import com.almanac.loam.View.WorldBuilder;
 import com.almanac.loam.View.WorldRenderer;
@@ -29,12 +30,19 @@ public class Play implements Screen {
 	private int worldWidth;
 	private int worldHeight;
 	
+	private PerlinNoiseGenerator pnoise;
+	
+	private float[][] n;
+	
 	public Play(Loam game) {
 		this.game = game;
 		
 		messages =	new ArrayList<String>();
-		worldWidth			=	75;
-		worldHeight			=	35;
+		worldWidth			=	200;
+		worldHeight			=	100;
+
+		
+		
 		createWorld(game, worldWidth, worldHeight);
 		
 		fov = new FieldOfView(world);
@@ -50,7 +58,8 @@ public class Play implements Screen {
 	}
 	
 	private void createWorld(Loam game, int worldWidth, int worldHeight) {
-		world = new WorldBuilder(worldWidth, worldHeight).makeCaves().build(game);
+		//world = new WorldBuilder(worldWidth, worldHeight).makeCaves().addDirt().build(game);
+		world = new WorldBuilder(worldWidth, worldHeight).perlinTiles().build(game);
 	}
 	
 	private void createCreatures(CreatureFactory creatureFactory) {

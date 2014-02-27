@@ -3,7 +3,8 @@ package com.almanac.loam.Model;
 import com.badlogic.gdx.graphics.Texture;
 
 public enum Tile {
-	GRASS("data/grass32.png"),
+	GRASS("data/sssdmz.png"),
+	DIRT("data/dirttile.png"),
 	ROCK("data/rock.png"),
 	BOUNDS("data/bounds.png"),
 	UNKNOWN("data/bounds.png");

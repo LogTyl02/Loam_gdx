@@ -1,7 +1,5 @@
 package com.almanac.loam.View;
 
-import java.util.List;
-
 import com.almanac.loam.Model.Creature;
 import com.almanac.loam.Model.FieldOfView;
 import com.badlogic.gdx.Gdx;
@@ -42,7 +40,7 @@ public class WorldRenderer {
 		this.world = world;
 		this.player = player;
 		this.fov = fov;
-		
+				
 		font = new BitmapFont(Gdx.files.internal("data/gameFont.fnt"),
 				Gdx.files.internal("data/gameFont_0.tga"), false);
 		
@@ -78,7 +76,7 @@ public class WorldRenderer {
 		//camera.position.set(player.x, player.y, 1);
 		camera.position.set(world.width() / 2, world.height() / 2, 1);
 		renderTiles(left, top);
-		renderItems();
+		//renderItems();
 		//renderPlayer();	
 		renderCreatures();
 
