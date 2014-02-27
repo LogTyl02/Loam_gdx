@@ -3,21 +3,25 @@ package com.almanac.loam.View;
 import com.almanac.loam.Model.Creature;
 import com.almanac.loam.Model.FieldOfView;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 
 public class WorldRenderer {
 	
 	private int screenWidth = 800;
 	private int screenHeight = 600;
+	private int lightSize = 256;
+	private TextureRegion occluders;
+	private FrameBuffer occludersFBO;
+	private FrameBuffer shadowMapFBO;
+	private Texture shadowMapTex;
 
 	World world;
 	SpriteBatch spriteBatch;
@@ -38,7 +42,18 @@ public class WorldRenderer {
 		this.world = world;
 		this.player = world.player();
 		this.fov = fov;
-			
+		
+		// Create a frame buffer object with no depth
+		occludersFBO = new FrameBuffer(Format.RGBA8888, lightSize, lightSize, false);
+		// Get the color buffer texture of FBO for region
+		occluders = new TextureRegion(occludersFBO.getColorBufferTexture());
+		// Flip on the y-axis cuz of OpenGL coords
+		occluders.flip(false, true);
+		
+		// 1D shadow map, lightSize * 1 pixels, no depth
+		shadowMapFBO = new FrameBuffer(Format.RGBA8888, lightSize, 1, false);
+		shadowMapTex = shadowMapFBO.getColorBufferTexture();
+		
 		font = new BitmapFont(Gdx.files.internal("data/gameFont.fnt"),
 				Gdx.files.internal("data/gameFont_0.tga"), false);
 		
@@ -61,17 +76,28 @@ public class WorldRenderer {
 		
 		int left = getScrollX();
 		int top = getScrollY();
+		
+		// Bind the occluder frame buffer
+		occludersFBO.begin();
+		
+		// Clear the frame buffer
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-				
+		camera.setToOrtho(false, occludersFBO.getWidth(), occludersFBO.getHeight());
+		
+		// Update the camera, and keep it centered on the player for now
 		camera.position.set(player.x * 32, player.y * 32, 1);
 		camera.update();
 		spriteBatch.setProjectionMatrix(camera.combined);
-		//camera.position.set(world.width() / 2, world.height() / 2, 1);
+		spriteBatch.setShader(null);
+		
+		
+		
 		renderTiles(left, top);
 		renderItems();
 		renderCreatures();
 		
+		occludersFBO.end();
 		snagItems();
 
 	}
