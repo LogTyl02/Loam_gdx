@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.Texture.TextureWrap;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -53,6 +55,10 @@ public class WorldRenderer {
 		// 1D shadow map, lightSize * 1 pixels, no depth
 		shadowMapFBO = new FrameBuffer(Format.RGBA8888, lightSize, 1, false);
 		shadowMapTex = shadowMapFBO.getColorBufferTexture();
+		
+		// Use linear filtering and repeat mode when sampling
+		shadowMapTex.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		shadowMapTex.setWrap(TextureWrap.Repeat, TextureWrap.Repeat);
 		
 		font = new BitmapFont(Gdx.files.internal("data/gameFont.fnt"),
 				Gdx.files.internal("data/gameFont_0.tga"), false);
@@ -180,6 +186,13 @@ public class WorldRenderer {
 	
 	public void dispose() {
 		spriteBatch.dispose();
+	}
+	
+	private void renderLight(Light o) {
+		occludersFBO.begin();
+		
+		Gdx.gl.glClearColor(0f,0f,0f,0f);
+		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 	}
 	
 }
