@@ -195,7 +195,6 @@ public class World {
 		return player.y;
 	}
 
-	
 	public List<Creature> getCreatures() {
 		return creatures;
 	}
@@ -214,6 +213,9 @@ public class World {
 		return tile(x, y).texture();
     }
 	
+	public Creature darkYoung() {
+		return darkYoung;
+	}
 	public void dispose() {
 		
 	}

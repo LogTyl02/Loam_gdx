@@ -63,5 +63,13 @@ public class Creature {
 	public void setCreatureAI(CreatureAI AI) {
 		this.AI = AI;
 	}
+	
+	public void wander() {
+		this.AI.wander();
+	}
+	
+	public World world() {
+		return world;
+	}
 
 }

@@ -53,6 +53,7 @@ public class InputHandler implements InputProcessor {
 			break;
 		}
 		
+		world.darkYoung().wander();
 
 return true;
 	}

@@ -63,6 +63,7 @@ public class WorldRenderer {
 	}
 	
 	public void render() {
+		
 		int left = getScrollX();
 		int top = getScrollY();
 		Gdx.gl.glClearColor(0, 0, 0, 1);
