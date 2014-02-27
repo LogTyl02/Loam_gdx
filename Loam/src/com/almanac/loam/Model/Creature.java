@@ -48,13 +48,12 @@ public class Creature {
 	}
 	
 	public void moveBy(int mx, int my) {
-		Tile tile = world.tile(x + mx, y + my);
-
+		Tile t = world.tile(x + mx, y + my);
 		
-		if (mx == 0 && my == 0) {
-			return;
+		if (t.isGround()) {
+			x = x + (mx);
+			y = y + (my);
 		}
-		
 	}
 	
 	public void update() {

@@ -4,7 +4,6 @@ import com.almanac.loam.Loam;
 import com.almanac.loam.Model.FieldOfView;
 import com.almanac.loam.Model.Tile;
 import com.almanac.loam.View.InputHandler;
-import com.almanac.loam.View.PerlinNoiseGenerator;
 import com.almanac.loam.View.World;
 import com.almanac.loam.View.WorldBuilder;
 import com.almanac.loam.View.WorldRenderer;
@@ -23,10 +22,6 @@ public class Play implements Screen {
 	
 	FieldOfView fov;
 	
-	private PerlinNoiseGenerator pnoise;
-	
-	private float[][] n;
-	
 	public Play(Loam game) {
 		this.game = game;
 
@@ -43,8 +38,7 @@ public class Play implements Screen {
 
 		
 		renderer = new WorldRenderer(world, fov);
-		Gdx.input.setInputProcessor(new InputHandler(world));
-		
+		Gdx.input.setInputProcessor(new InputHandler(world, renderer));
 	}
 	
 	private void createWorld(Loam game, int worldWidth, int worldHeight) {
@@ -67,9 +61,6 @@ public class Play implements Screen {
 		world = new WorldBuilder(worldWidth, worldHeight).perlinMap(octave, thresholdLow, thresholdHigh).build(game);
 	}
 	
-
-	
-
 	
 	@Override
 	public void render(float delta) {

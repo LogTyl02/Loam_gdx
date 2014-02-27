@@ -67,18 +67,11 @@ public class WorldRenderer {
 		int top = getScrollY();
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		
-		
-		if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-			player.moveBy(0, 1);
-			System.out.println(player.y);
-		}
-		
+				
 		//camera.position.set(player.x, player.y, 1);
 		camera.position.set(world.width() / 2, world.height() / 2, 1);
 		renderTiles(left, top);
-		//renderItems();
-		//renderPlayer();	
+		renderItems();
 		renderCreatures();
 
 	}

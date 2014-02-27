@@ -49,8 +49,6 @@ public class World {
 		messages =	new ArrayList<String>();
 		fov = new FieldOfView(this);
 		
-		
-
 		CreatureFactory creatureFactory = new CreatureFactory(this, fov);
 		ItemFactory itemFactory = new ItemFactory(this);
 		
@@ -175,12 +173,12 @@ public class World {
 	}
 	
 	private void createItems(ItemFactory itemFactory) {
-		for (int i = 0; i < 50; i++) {
+		for (int i = 0; i < 100; i++) {
 			itemFactory.newRedMushroom();
 			System.out.println("New red mushroom");
 		}
 		
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 30; i++) {
 			itemFactory.newBlueMushroom();
 		}
 		

@@ -18,65 +18,45 @@ public class InputHandler implements InputProcessor {
 	Loam game;
 
 	
-	public InputHandler(World world) {
+	public InputHandler(World world, WorldRenderer worldRenderer) {
 		this.world = world;
-
+		this.worldRenderer = worldRenderer;
 	}
 	
 	@Override
 	public boolean keyDown(int keycode) {
 		
-		if (this.state == 0) {
-			switch(keycode) {
-			case Keys.P:
-				game.setScreen(new Play(game));
-			}
-		}
-		
-if (this.state == 1) {
-	
-		
 		switch(keycode) {
-			case Keys.NUMPAD_8:
-				player.x += 1;
-				break;
-			case Keys.NUMPAD_2:
-				player.moveBy(0, 1);;
-				break;
-			case Keys.NUMPAD_4:
-				player.moveBy(0, 1);;
-				break;
-			case Keys.NUMPAD_6:
-				player.moveBy(0, 1);;
-				break;
-			case Keys.NUMPAD_7:
-				player.moveBy(0, 1);;
-				break;
-			case Keys.NUMPAD_1:
-				player.moveBy(0, 1);;
-				break;
-			case Keys.NUMPAD_9:
-				player.moveBy(0, 1);;
-				break;
-			case Keys.NUMPAD_3:
-				player.moveBy(0, 1);;
-				break;
-			case Keys.W:
-				
-				
-			case Keys.ESCAPE:
-				if (!world.game.isPaused) {
-					world.game.pause();
-				} else if (world.game.isPaused) {
-					world.game.resume();
-				}
-			default:
-				break;
+		case Keys.NUMPAD_8:
+			world.player().moveBy(0, 1);
+			break;
+		case Keys.NUMPAD_2:
+			world.player().moveBy(0, -1);
+			break;
+		case Keys.NUMPAD_4:
+			world.player().moveBy(-1, 0);
+			break;
+		case Keys.NUMPAD_6:
+			world.player().moveBy(1, 0);
+			break;
+		case Keys.NUMPAD_7:
+			world.player().moveBy(-1, 1);
+			break;
+		case Keys.NUMPAD_9:
+			world.player().moveBy(1, 1);
+			break;
+		case Keys.NUMPAD_1:
+			world.player().moveBy(-1, -1);
+			break;
+		case Keys.NUMPAD_3:
+			world.player().moveBy(1, -1);
+			break;
 		}
 		
-}
+
 return true;
 	}
+
 
 	@Override
 	public boolean keyUp(int keycode) {
@@ -89,16 +69,16 @@ return true;
 
 		switch(character) {
 			case Keys.NUMPAD_8:
-				player.moveBy(0, 1);;
+				System.out.println("Movin up");
 				break;
 			case Keys.NUMPAD_2:
-				player.moveBy(0, 1);;
+				System.out.println("Movin down");
 				break;
 			case Keys.NUMPAD_4:
-				player.moveBy(0, 1);;
+				System.out.println("Movin right");
 				break;
 			case Keys.NUMPAD_6:
-				player.moveBy(0, 1);;
+				System.out.println("Movin left");
 				break;
 			default:
 				break;
