@@ -5,7 +5,10 @@ import java.util.List;
 
 import com.almanac.loam.Loam;
 import com.almanac.loam.Model.Creature;
+import com.almanac.loam.Model.CreatureFactory;
+import com.almanac.loam.Model.FieldOfView;
 import com.almanac.loam.Model.Item;
+import com.almanac.loam.Model.ItemFactory;
 import com.almanac.loam.Model.Tile;
 import com.badlogic.gdx.graphics.Texture;
 
@@ -14,6 +17,14 @@ public class World {
 
 	private Tile[][] tiles;
 	private List<Creature> creatures;
+	
+	private Creature player;
+	private Creature darkYoung;
+	private FieldOfView fov;
+	
+	private CreatureFactory creatureFactory;
+	private ItemFactory itemFactory;
+	private List<String> messages;
 	
 	// Only one item per tile, for now
 	private Item[][] items;
@@ -34,6 +45,18 @@ public class World {
 		
 		this.creatures = new ArrayList<Creature>();
 		this.items = new Item[width][height];
+		
+		messages =	new ArrayList<String>();
+		fov = new FieldOfView(this);
+		
+		
+
+		CreatureFactory creatureFactory = new CreatureFactory(this, fov);
+		ItemFactory itemFactory = new ItemFactory(this);
+		
+		createCreatures(creatureFactory);
+		createItems(itemFactory);
+		
 	}
 	
 	/*
@@ -127,6 +150,14 @@ public class World {
 		return height;
 	}
 	
+	public FieldOfView fov() {
+		return fov;
+	}
+	
+	public Creature player() {
+		return player;
+	}
+	
 	public Item item(int x, int y) {
 		return items[x][y];
 	}
@@ -134,6 +165,38 @@ public class World {
 	public Item[][] getItems() {
 		return items;
 	}
+	
+	
+	private void createCreatures(CreatureFactory creatureFactory) {
+		player = creatureFactory.newPlayer(messages);
+		System.out.println("Player spawned at " + player.x + " " + player.y);
+		darkYoung = creatureFactory.newDarkYoung();
+		System.out.println("Dark Young spawned at " + darkYoung.x + " " + darkYoung.y);
+	}
+	
+	private void createItems(ItemFactory itemFactory) {
+		for (int i = 0; i < 50; i++) {
+			itemFactory.newRedMushroom();
+			System.out.println("New red mushroom");
+		}
+		
+		for (int i = 0; i < 10; i++) {
+			itemFactory.newBlueMushroom();
+		}
+		
+		for (int i = 0; i < 2; i++) {
+			itemFactory.newGoldMushroom();
+		}
+	}
+	
+	public int px() {
+		return player.x;
+	}
+	
+	public int py() {
+		return player.y;
+	}
+
 	
 	public List<Creature> getCreatures() {
 		return creatures;

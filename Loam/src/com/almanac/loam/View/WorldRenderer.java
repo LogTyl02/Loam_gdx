@@ -36,10 +36,11 @@ public class WorldRenderer {
 	
 	private OrthographicCamera camera;
 	
-	public WorldRenderer(World world, Creature player, FieldOfView fov) {
+	public WorldRenderer(World world, FieldOfView fov) {
 		this.world = world;
-		this.player = player;
+		this.player = world.player();
 		this.fov = fov;
+		
 				
 		font = new BitmapFont(Gdx.files.internal("data/gameFont.fnt"),
 				Gdx.files.internal("data/gameFont_0.tga"), false);

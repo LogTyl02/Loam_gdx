@@ -1,13 +1,7 @@
 package com.almanac.loam.Screens;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.almanac.loam.Loam;
-import com.almanac.loam.Model.Creature;
-import com.almanac.loam.Model.CreatureFactory;
 import com.almanac.loam.Model.FieldOfView;
-import com.almanac.loam.Model.ItemFactory;
 import com.almanac.loam.Model.Tile;
 import com.almanac.loam.View.InputHandler;
 import com.almanac.loam.View.PerlinNoiseGenerator;
@@ -21,15 +15,13 @@ public class Play implements Screen {
 
 	Loam game;
 	World world;
-	private List<String> messages;
+
 	public WorldRenderer renderer;
-	
-	private Creature player;
-	private Creature darkYoung;
-	private FieldOfView fov;
-	
+		
 	private int worldWidth;
 	private int worldHeight;
+	
+	FieldOfView fov;
 	
 	private PerlinNoiseGenerator pnoise;
 	
@@ -37,8 +29,7 @@ public class Play implements Screen {
 	
 	public Play(Loam game) {
 		this.game = game;
-		
-		messages =	new ArrayList<String>();
+
 		worldWidth			=	200;
 		worldHeight			=	100;
 		int octave			= 	4;
@@ -48,14 +39,10 @@ public class Play implements Screen {
 		createWorld(game, worldWidth, worldHeight);
 		//createPerlinWorld(game, worldWidth, worldHeight, octave, thresholdLow, thresholdHigh);
 		
-		fov = new FieldOfView(world);
-		CreatureFactory creatureFactory = new CreatureFactory(world, fov);
-		ItemFactory itemFactory = new ItemFactory(world);
+		this.fov = world.fov();
+
 		
-		createCreatures(creatureFactory);
-		createItems(itemFactory);
-		
-		renderer = new WorldRenderer(world, this.player, fov);
+		renderer = new WorldRenderer(world, fov);
 		Gdx.input.setInputProcessor(new InputHandler(world));
 		
 	}
@@ -80,39 +67,9 @@ public class Play implements Screen {
 		world = new WorldBuilder(worldWidth, worldHeight).perlinMap(octave, thresholdLow, thresholdHigh).build(game);
 	}
 	
-	private void createCreatures(CreatureFactory creatureFactory) {
-		player = creatureFactory.newPlayer(messages);
-		System.out.println("Player spawned at " + player.x + " " + player.y);
-		darkYoung = creatureFactory.newDarkYoung();
-		System.out.println("Dark Young spawned at " + darkYoung.x + " " + darkYoung.y);
-	}
+
 	
-	private void createItems(ItemFactory itemFactory) {
-		for (int i = 0; i < 50; i++) {
-			itemFactory.newRedMushroom();
-			System.out.println("New red mushroom");
-		}
-		
-		for (int i = 0; i < 10; i++) {
-			itemFactory.newBlueMushroom();
-		}
-		
-		for (int i = 0; i < 2; i++) {
-			itemFactory.newGoldMushroom();
-		}
-	}
-	
-	public int px() {
-		return player.x;
-	}
-	
-	public int py() {
-		return player.y;
-	}
-	
-	public Creature player() {
-		return player;
-	}
+
 	
 	@Override
 	public void render(float delta) {
