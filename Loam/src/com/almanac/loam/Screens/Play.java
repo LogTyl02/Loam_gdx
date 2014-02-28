@@ -38,7 +38,7 @@ public class Play implements Screen {
 
 		
 		renderer = new WorldRenderer(world, fov);
-		Gdx.input.setInputProcessor(new InputHandler(world, renderer));
+		//Gdx.input.setInputProcessor(new InputHandler(world, renderer));
 	}
 	
 	private void createWorld(Loam game, int worldWidth, int worldHeight) {
