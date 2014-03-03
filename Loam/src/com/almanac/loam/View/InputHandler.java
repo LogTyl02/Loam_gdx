@@ -28,7 +28,7 @@ public class InputHandler implements InputProcessor {
 		
 		switch(keycode) {
 		case Keys.NUMPAD_8:
-			world.player().moveBy(0, 1);
+			world.player().moveBy(0, 1);	
 			break;
 		case Keys.NUMPAD_2:
 			world.player().moveBy(0, -1);

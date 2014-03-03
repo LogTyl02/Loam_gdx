@@ -92,11 +92,13 @@ public class WorldRenderer {
 		}
 		else{
 			shader = ShaderSelection.Default;
-			currentShader = defaultShader;
+			currentShader = finalShader;
 		}
 	}
 
-	public WorldRenderer(World world, FieldOfView fov) {
+	
+
+	public WorldRenderer(final World world, FieldOfView fov) {
 		this.world = world;
 		this.player = world.player();
 		
@@ -156,57 +158,14 @@ public class WorldRenderer {
 		bitmapFont.setScale(1.0f/32.0f);
 		
 		// Input processing
-		Gdx.input.setInputProcessor(new InputAdapter() {
-			
-			public boolean scrolled(int amount){
-				camera.zoom += (float)amount * 0.08f;
-				camera.update();
-				return false;
-			}
-			public boolean keyUp(int keycode) {
-				if(keycode == Keys.LEFT){
-					camera.translate(-1.0f, 0.0f);
-					camera.update();
-				}
-				else if(keycode == Keys.RIGHT){
-					camera.translate(1.0f, 0.0f);
-					camera.update();
-				}
-				else if(keycode == Keys.UP){
-					camera.translate(0.0f, 1.0f);
-					camera.update();
-				}
-				else if(keycode == Keys.DOWN){
-					camera.translate(0.0f, -1.0f);
-					camera.update();
-				}
-				else if(keycode == Keys.NUM_1){
-					setShader(ShaderSelection.Default);
-				}
-				else if(keycode == Keys.NUM_2){
-					setShader(ShaderSelection.Ambient);
-				}
-				else if(keycode == Keys.NUM_3){
-					setShader(ShaderSelection.Light);
-				}
-				else if(keycode == Keys.NUM_4){
-					setShader(ShaderSelection.Final);
-				}
-				else if(keycode == Keys.SPACE){
-					lightOscillate = !lightOscillate;
-				}
-				
-				return false;
-			}
-			public boolean touchUp(int x, int y, int pointer, int button) {
-				lightMove = !lightMove;
-				return false;
-			}
-		});
+		Gdx.input.setInputProcessor(new InputHandler(world, this)); 
 	}
+	
 	
 	public void render() {
 		final float dt = Gdx.graphics.getRawDeltaTime();
+		camera.position.set(player.x * 32, player.y * 32, 1);
+		camera.update();
 
 		zAngle += dt * zSpeed;
 		while(zAngle > PI2)
@@ -220,7 +179,7 @@ public class WorldRenderer {
 		spriteBatch.begin();
 		float lightSize = lightOscillate? (4.75f + 0.25f * (float)Math.sin(zAngle) + .2f*MathUtils.random()):5.0f;
 		
-		spriteBatch.draw(light, (player.x * 32) - light.getWidth() / 4, (player.y * 32) - light.getHeight() / 2);
+		spriteBatch.draw(light, (player.x * 32) - light.getWidth() / 4 + 1, (player.y * 32) - light.getHeight() / 2);
 		
 		spriteBatch.end();
 		FBO.end();
@@ -236,29 +195,6 @@ public class WorldRenderer {
 		renderRocks();
 		renderCreatures();
 		renderItems();
-		spriteBatch.end();
-		
-		//debug information
-		spriteBatch.setProjectionMatrix(camera2d.combined);
-		spriteBatch.setShader(defaultShader);
-		spriteBatch.begin();
-		float x = 0.0f;
-		bitmapFont.setColor(shaderSelection==ShaderSelection.Default?Color.YELLOW:Color.WHITE);
-		x += bitmapFont.draw(spriteBatch, "1=Default Shader", x, camera2d.viewportHeight).width;
-		bitmapFont.setColor(shaderSelection==ShaderSelection.Ambient?Color.YELLOW:Color.WHITE);
-		x += bitmapFont.draw(spriteBatch, " 2=Ambiant Light", x, camera2d.viewportHeight).width;
-		bitmapFont.setColor(shaderSelection==ShaderSelection.Light?Color.YELLOW:Color.WHITE);
-		x += bitmapFont.draw(spriteBatch, " 3=Light Shader", x, camera2d.viewportHeight).width;
-		bitmapFont.setColor(shaderSelection==ShaderSelection.Final?Color.YELLOW:Color.WHITE);
-		x += bitmapFont.draw(spriteBatch, " 4=Final Shader", x, camera2d.viewportHeight).width;
-		x = 0.0f;
-		bitmapFont.setColor(lightMove?Color.YELLOW:Color.WHITE);
-		x += bitmapFont.draw(spriteBatch, "click=light control (" +lightMove+ ")", x, camera2d.viewportHeight-bitmapFont.getLineHeight()).width;
-		bitmapFont.setColor(lightOscillate?Color.YELLOW:Color.WHITE);
-		x += bitmapFont.draw(spriteBatch, " space=light flicker (" +lightOscillate+ ")", x, camera2d.viewportHeight-bitmapFont.getLineHeight()).width;
-		x = 0.0f;
-		bitmapFont.setColor(Color.WHITE);
-		x += bitmapFont.draw(spriteBatch, Gdx.graphics.getFramesPerSecond() + " fps", x, camera2d.viewportHeight-bitmapFont.getLineHeight()*2.0f).width;
 		spriteBatch.end();
 	}
 
@@ -372,7 +308,4 @@ public class WorldRenderer {
 		finalShader.setUniformf("resolution", width, height);
 		finalShader.end();
 	}
-	
-
-	
 }
