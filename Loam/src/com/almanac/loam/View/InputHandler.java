@@ -52,8 +52,6 @@ public class InputHandler implements InputProcessor {
 			world.player().moveBy(1, -1);
 			break;
 		}
-		
-		world.darkYoung().wander();
 
 return true;
 	}

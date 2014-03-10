@@ -75,29 +75,6 @@ public class WorldRenderer {
 	final String lightPixelShader =  Gdx.files.internal("data/lightPixelShader.glsl").readString();
 	final String finalPixelShader =  Gdx.files.internal("data/pixelShader.glsl").readString();
 	
-	// Change the shader selection
-	public void setShader(ShaderSelection shader) {
-		shaderSelection = shader;
-		
-		
-		// Change to case later
-		if(shader == ShaderSelection.Final){
-			currentShader = finalShader;
-		}
-		else if(shader == ShaderSelection.Ambient){
-			currentShader = ambientShader;
-		}
-		else if(shader == ShaderSelection.Light){
-			currentShader = lightShader;
-		}
-		else{
-			shader = ShaderSelection.Default;
-			currentShader = finalShader;
-		}
-	}
-
-	
-
 	public WorldRenderer(final World world, FieldOfView fov) {
 		this.world = world;
 		this.player = world.player();
@@ -107,21 +84,21 @@ public class WorldRenderer {
 		bitmapFont = new BitmapFont(Gdx.files.internal("data/gameFont.fnt"),
 				Gdx.files.internal("data/gameFont_0.tga"), false);
 		
+		// Set up initial shader
 		ShaderProgram.pedantic = false;
 		defaultShader = new ShaderProgram(vertexShader, defaultPixelShader);
 		ambientShader = new ShaderProgram(vertexShader, ambientPixelShader);
 		lightShader = new ShaderProgram(vertexShader, lightPixelShader);
 		finalShader = new ShaderProgram(vertexShader, finalPixelShader);
-		setShader(shaderSelection);
+		currentShader = finalShader;
 		
+		// Set up initial camera conditions
 		camera = new OrthographicCamera(width, height);
 		camera.position.set(player.x * 32, player.y * 32, 1);
-		camera.update();
-		
+		camera.update();	
 		camera2d = new OrthographicCamera(width, height);
 		camera2d.position.set(player.x * 32, player.y * 32, 1);
 		camera2d.update();
-
 
 		FBO = new FrameBuffer(Format.RGBA8888, width, height, false);
 		 
@@ -164,12 +141,15 @@ public class WorldRenderer {
 	
 	public void render() {
 		final float dt = Gdx.graphics.getRawDeltaTime();
+		
+		//Keep the camera following the player
 		camera.position.set(player.x * 32, player.y * 32, 1);
 		camera.update();
 
 		zAngle += dt * zSpeed;
 		while(zAngle > PI2)
 			zAngle -= PI2;
+		
 		//draw the light to the FBO
 		FBO.begin();
 		spriteBatch.setProjectionMatrix(camera.combined);
@@ -191,11 +171,13 @@ public class WorldRenderer {
 		spriteBatch.begin();
 		FBO.getColorBufferTexture().bind(1); //this is important! bind the FBO to the 2nd texture unit
 		light.bind(0);
+		
 		renderGrass();
 		renderRocks();
-		renderCreatures();
 		renderItems();
+		renderCreatures();
 		spriteBatch.end();
+		snagItems();
 	}
 
 	private void renderGrass() {
@@ -203,11 +185,10 @@ public class WorldRenderer {
 	        for (int y = 0; y < world.height(); y++){
 	        		int wx = x;
 	        		int wy = y;
-	        		// spriteBatch.draw(world.tile(wx, wy).texture(), x * 32, y * 32);
-	        	//if (!player.canSee(wx, wy))
 	        		
+	        		// For every tile on the map, if it's grass, render it
 	        		if (world.tile(wx, wy) == Tile.GRASS) {
-	        		spriteBatch.draw(world.tile(wx, wy).texture(), x * 32, y * 32);
+	        			spriteBatch.draw(world.tile(wx, wy).texture(), x * 32, y * 32);
 	        		}
 	        }
 	    }
@@ -219,8 +200,9 @@ public class WorldRenderer {
 	        		int wx = x;
 	        		int wy = y;
 	     		
+	        		// For every tile on the map, if it's rock, render it
 	        		if (world.tile(wx, wy) == Tile.ROCK) {
-	        		spriteBatch.draw(world.tile(wx, wy).texture(), x * 32, y * 32);
+	        			spriteBatch.draw(world.tile(wx, wy).texture(), x * 32, y * 32);
 	        		}
 	        }
 	    }
@@ -229,6 +211,8 @@ public class WorldRenderer {
 	private void renderItems() {	
 		for (int x = 0; x < world.width(); x++) {
 			for (int y = 0; y < world.height(); y++) {
+				
+				// If a spot has an item, draw the item
 				if (!(world.item(x, y) == null)) {
         			spriteBatch.draw(world.item(x, y).texture(), x * 32, y * 32); 		
         		}
@@ -243,7 +227,6 @@ public class WorldRenderer {
 		}
 	}
 	
-
 	public Camera getCamera() {
 		return camera;
 	}
@@ -296,7 +279,6 @@ public class WorldRenderer {
 		camera2d = new OrthographicCamera(20.0f, 20.0f * height / width);
 		camera2d.position.set(camera.viewportWidth / 2.0f, camera.viewportHeight / 2.0f, 0.0f);
 		camera2d.update();
-
 
 		FBO = new FrameBuffer(Format.RGBA8888, width, height, false);
 		 
