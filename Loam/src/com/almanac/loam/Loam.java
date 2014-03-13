@@ -25,8 +25,8 @@ public class Loam extends Game {
 		isPaused = false;
 		
 		//setScreen(new SplashScreen(this));
-		setScreen(new MainMenu(this));
-		//setScreen(new Play(this));	
+		//setScreen(new MainMenu(this));
+		setScreen(new Play(this));	
 	}
 
 	@Override
@@ -48,8 +48,6 @@ public class Loam extends Game {
 		super.resize(width, height);
 	}
 	
-	
-
 	@Override
 	public void pause() {
 		super.pause();

@@ -13,19 +13,15 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+
 
 public class MainMenu implements Screen {
 		Loam game;
 		private SpriteBatch spriteBatch;
 		private BitmapFont font;
-		//private ShapeRenderer renderer;
-		//private BitmapFont multiPageFont;
 		String sphinxText;
 		String menuTitle;
 		String PLAY;
@@ -48,8 +44,6 @@ public class MainMenu implements Screen {
 	public MainMenu(Loam game) {
 		//this.game = game;		
 		}
-	
-	
 	
 	@Override
 	public void render(float delta) {
